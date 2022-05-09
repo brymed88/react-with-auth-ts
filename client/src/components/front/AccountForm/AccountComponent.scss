@@ -1,0 +1,133 @@
+@mixin fx-col-wp {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  width: 100%;
+}
+@mixin fx-row-wp {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+/*Popup Login Form*/
+
+.account_component {
+  @include fx-col-wp;
+  background: #fff;
+  align-items: center;
+  padding: 40px 0;
+
+  .account_container {
+    @include fx-col-wp;
+    align-items: center;
+    max-width: 500px;
+    padding: 40px 0;
+    box-shadow: 0px 0px 4px #aaa;
+    position: relative;
+
+    .tabs {
+      @include fx-row-wp;
+      align-content: center;
+      margin: 8px 0;
+
+      label {
+        padding: 8px 0;
+        width: 50%;
+        text-align: center;
+        color: #333;
+        font-size: 1.4rem;
+        border-top: 4px solid green;
+        cursor: pointer;
+      }
+
+      .label_not_selected {
+        border: none;
+      }
+    }
+
+    .back_btn {
+      position: absolute;
+      left: 5px;
+      top: 5px;
+      width: 22px;
+      cursor: pointer;
+    }
+
+    form {
+      @include fx-col-wp;
+      align-items: center;
+      border-radius: 4px;
+
+      h2 {
+        font-size: 1.4rem;
+        color: #444;
+      }
+      .loginError {
+        width: 99%;
+        text-align: center;
+        margin: 10px 0;
+        color: white;
+        background-color: rgba(255, 0, 0, 0.7);
+        padding: 8px 0;
+      }
+
+      .inputs {
+        @include fx-col-wp;
+        align-items: center;
+        padding: 4px 0;
+      }
+      .signup_disclaimer {
+        width: 84%;
+        padding-top: 12px;
+        text-align: center;
+      }
+      p {
+        width: 84%;
+        color: #444;
+      }
+    }
+
+    input {
+      margin: 4px;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 4px;
+      padding: 16px 0;
+      text-indent: 4px;
+      min-width: 84%;
+      font-size: 1.2rem;
+    }
+    span {
+      color: rgb(255, 0, 0);
+      padding: 4px 0;
+      width: 84%;
+    }
+
+    input[type='submit'] {
+      background-color: green !important;
+      width: 84%;
+      padding: 16px 0;
+      cursor: pointer;
+      margin: 8px 0;
+      border: none;
+      border-radius: 4px;
+      font-size: 1.2rem;
+      color: white;
+    }
+    input[type='button']:hover {
+      box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .success_enroll {
+      @include fx-col-wp;
+      align-items: center;
+
+      h2 {
+        color: green;
+        font-size: 1.4rem;
+      }
+    }
+  }
+}
+/*End Login Form*/

@@ -1,0 +1,42 @@
+/* 
+*Spinner Component Styles
+*/
+
+$background-color: rgba(0, 0, 0, 0.6);
+$border-color: rgb(218, 218, 218);
+$loader-color: rgb(51, 51, 51);
+
+.spinner-full {
+  position: fixed;
+  top: 0;
+  left: 0;
+  min-width: 100%;
+  min-height: 100%;
+  background-color: $background-color;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @extend .spinner-part;
+}
+.spinner-part {
+  div {
+    border: 16px solid $border-color;
+    border-top: 16px solid $loader-color;
+    border-radius: 50%;
+    animation: spin 0.9s ease infinite;
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+}
+
+/*
+*End spinner component
+*/
