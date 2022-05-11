@@ -29,7 +29,7 @@ const LoginComponent: React.FC<Props> = ({ workflow }) => {
   const [loading, setLoading] = useState(false);
   const [submitError, setSubmitError] = useState(false);
 
-  const FormSubmit = async (data: User) => {
+  const FormSubmit = (data: User) => {
     //Reset submit status in case of past failure
     setSubmitError(false);
 
@@ -37,23 +37,26 @@ const LoginComponent: React.FC<Props> = ({ workflow }) => {
     setLoading(true);
 
     if (data) {
-      //Call util function to process api call
-      const response = await Login(data);
+      const ProcessForm = async () => {
+        //Call util function to process api call
+        const response = await Login(data);
 
-      //Successful login, redirect user to dashboard
-      if (response.status === 'success') {
-        //Disable loading spinner as action is now complete
-        setLoading(false);
+        //Successful login, redirect user to dashboard
+        if (response.status === 'success') {
+          //Disable loading spinner as action is now complete
+          setLoading(false);
 
-        //Redirect to dashboard if login was successful
-        navigate('/dashboard', { replace: true });
-      } else {
-        //Set form error for unsuccessful login
-        setSubmitError(true);
+          //Redirect to dashboard if login was successful
+          navigate('/dashboard', { replace: true });
+        } else {
+          //Set form error for unsuccessful login
+          setSubmitError(true);
 
-        //Disable loading spinner as action is now complete
-        setLoading(false);
-      }
+          //Disable loading spinner as action is now complete
+          setLoading(false);
+        }
+      };
+      ProcessForm();
     }
   };
 

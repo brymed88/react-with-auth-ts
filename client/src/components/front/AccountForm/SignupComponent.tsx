@@ -29,7 +29,7 @@ const SignupComponent: React.FC<Props> = ({ workflow, updateEmail }) => {
   const [loading, setLoading] = useState(false);
   const [submitError, setSubmitError] = useState(false);
 
-  const FormSubmit = async (data: FormData) => {
+  const FormSubmit = (data: FormData) => {
     //Reset submit status in case of past failure
     setSubmitError(false);
 
@@ -37,26 +37,29 @@ const SignupComponent: React.FC<Props> = ({ workflow, updateEmail }) => {
     setLoading(true);
 
     if (data.vpassword === data.password) {
-      //Call util function to process api call for signup
-      const response = await Signup(data);
+      const ProcessForm = async () => {
+        //Call util function to process api call for signup
+        const response = await Signup(data);
 
-      //Successful login, redirect user to dashboard
-      if (response.status === 'success') {
-        //Add user email to context
-        updateEmail(data.email);
+        //Successful login, redirect user to dashboard
+        if (response.status === 'success') {
+          //Add user email to context
+          updateEmail(data.email);
 
-        //Disable loading spinner as action is now complete
-        setLoading(false);
+          //Disable loading spinner as action is now complete
+          setLoading(false);
 
-        //Call back for parent function to proceed to email code verification
-        workflow('signup', 'verify');
-      } else {
-        //Set form error for unsuccessful login
-        setSubmitError(true);
+          //Call back for parent function to proceed to email code verification
+          workflow('signup', 'verify');
+        } else {
+          //Set form error for unsuccessful login
+          setSubmitError(true);
 
-        //Disable loading spinner as action is now complete
-        setLoading(false);
-      }
+          //Disable loading spinner as action is now complete
+          setLoading(false);
+        }
+      };
+      ProcessForm();
     } else {
       //Set React-Hook-form error for verify password not matching
       setError('vpassword', {
