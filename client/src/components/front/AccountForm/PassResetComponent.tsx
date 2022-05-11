@@ -1,59 +1,68 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { PassReset } from '../../../utils/AuthUtil';
 import SpinnerComponent from '../../common/spinner/SpinnerComponent';
-import FormContext from './FormContext';
 
-const PassResetComponent = ({ callback }) => {
+interface Props {
+  workflow: (prev: string, target: string) => void;
+  email: string;
+}
+
+const PassResetComponent: React.FC<Props> = ({ workflow, email }) => {
+  // This type will be used later in the form.
+  type User = {
+    password: string;
+    verifypassword: string;
+  };
   //De-structure useForm import variables
   const {
     register,
     handleSubmit,
     setError,
     formState: { errors },
-  } = useForm();
-
-  //Get Form Context
-  const [context, setContext] = useContext(FormContext);
+  } = useForm<User>();
 
   //Setup state variables for form functionality
   const [loading, setLoading] = useState(false);
   const [submitError, setSubmitError] = useState(false);
 
-  const FormSubmit = async (data) => {
+  const FormSubmit = (data: User) => {
     //Reset submit status in case of past failure
     setSubmitError(false);
 
     //Set Loading spinner to true while form is processing
     setLoading(true);
 
-    if (data.vpassword === data.password) {
-      //Build value object to send to api
-      const values = { email: `${context}`, password: data.password };
+    if (data.verifypassword === data.password) {
+      const ProcessForm = async () => {
+        //Build value object to send to api
+        const values = { email: `${email}`, password: data.password };
 
-      //Call util function to process api call for pass reset
-      const response = await PassReset(values);
+        //Call util function to process api call for pass reset
+        const response = await PassReset(values);
 
-      //Successful login, redirect user to dashboard
-      if (response.status === 'success') {
-        //Disable loading spinner as action is now complete
-        setLoading(false);
+        //Successful login, redirect user to dashboard
+        if (response.status === 'success') {
+          //Disable loading spinner as action is now complete
+          setLoading(false);
 
-        //Call back for parent function to proceed to success component
-        callback('passreset', 'success');
-      } else {
-        //Disable loading spinner as action is now complete
-        setLoading(false);
+          //Set the context pages
+          workflow('passreset', 'success');
+        } else {
+          //Disable loading spinner as action is now complete
+          setLoading(false);
 
-        //Set form error for unsuccessful login
-        setSubmitError(true);
-      }
+          //Set form error for unsuccessful login
+          setSubmitError(true);
+        }
+      };
+      ProcessForm();
     } else {
       //Disable loading spinner as action is now complete
       setLoading(false);
 
       //Set React-Hook-form error for verify password not matching
-      setError('vpassword', {
+      setError('verifypassword', {
         type: 'manual',
         message: 'Passwords must match!',
       });
@@ -83,14 +92,14 @@ const PassResetComponent = ({ callback }) => {
       {/* Add the Verify password field conditionally if form type is pass reset */}
       <div className='inputs'>
         <input
-          {...register('vpassword', { required: true })}
+          {...register('verifypassword', { required: true })}
           placeholder='Verify Password'
         />
-        {errors.vpassword && (
+        {errors.verifypassword && (
           <span>
             {/*Check if password mismatch error is set, if not then display generic error*/}
-            {errors.vpassword.message
-              ? errors.vpassword.message
+            {errors.verifypassword.message
+              ? errors.verifypassword.message
               : 'Field Required'}
           </span>
         )}

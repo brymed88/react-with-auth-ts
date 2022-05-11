@@ -5,42 +5,52 @@ import './ContactComponent.min.css';
 import SpinnerComponent from '../../common/spinner/SpinnerComponent';
 
 const ContactFormComponent = () => {
+  // This type will be used later in the form.
+  type User = {
+    name: string;
+    email: string;
+    topic: string;
+  };
+
   //De-structure useForm import variables
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm<User>();
 
   //Setup state variables for form functionality
   const [status, setStatus] = useState('Send');
   const [loading, setLoading] = useState(false);
   const [submitError, setSubmitError] = useState(false);
 
-  const FormSubmit = async (data) => {
+  const FormSubmit = (data: User): void => {
     setLoading(true);
 
     //Reset submit status in case of past failure
     setSubmitError(false);
 
     if (data) {
-      //Call util function to process api call
-      const response = await SendMessage(data);
+      const ProcessForm = async () => {
+        //Call util function to process api call
+        const response = await SendMessage(data);
 
-      //Message successfully sent
-      if (response.status === 'success') {
-        //Disable loading spinner as action is now complete
-        setLoading(false);
+        //Message successfully sent
+        if (response.status === 'success') {
+          //Disable loading spinner as action is now complete
+          setLoading(false);
 
-        //Set status of form to sent
-        setStatus('Message Sent!');
-      } else {
-        //Set form error for unsuccessful login
-        setSubmitError(true);
+          //Set status of form to sent
+          setStatus('Message Sent!');
+        } else {
+          //Set form error for unsuccessful login
+          setSubmitError(true);
 
-        //Disable loading spinner as action is now complete
-        setLoading(false);
-      }
+          //Disable loading spinner as action is now complete
+          setLoading(false);
+        }
+      };
+      ProcessForm();
     }
   };
 
@@ -68,9 +78,7 @@ const ContactFormComponent = () => {
           <input
             {...register('email', {
               required: true,
-              pattern: {
-                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-              },
+              pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
             })}
             placeholder='Email'
           />

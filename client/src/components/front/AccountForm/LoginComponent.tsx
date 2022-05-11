@@ -4,7 +4,17 @@ import { useForm } from 'react-hook-form';
 import { Login } from '../../../utils/AuthUtil';
 import SpinnerComponent from '../../common/spinner/SpinnerComponent';
 
-const LoginComponent = ({ callback }) => {
+interface Props {
+  workflow: (prev: string, target: string) => void;
+}
+
+const LoginComponent: React.FC<Props> = ({ workflow }) => {
+  // This type will be used later in the form.
+  type User = {
+    email: string;
+    password: string;
+  };
+
   //Assign useNavigate import to navigate from react-router-dom
   const navigate = useNavigate();
 
@@ -13,13 +23,13 @@ const LoginComponent = ({ callback }) => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm<User>();
 
   //Setup state variables for form functionality
   const [loading, setLoading] = useState(false);
   const [submitError, setSubmitError] = useState(false);
 
-  const FormSubmit = async (data) => {
+  const FormSubmit = async (data: User) => {
     //Reset submit status in case of past failure
     setSubmitError(false);
 
@@ -61,9 +71,7 @@ const LoginComponent = ({ callback }) => {
         <input
           {...register('email', {
             required: true,
-            pattern: {
-              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-            },
+            pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
           })}
           placeholder='Email'
         />
@@ -76,8 +84,9 @@ const LoginComponent = ({ callback }) => {
 
       <div className='inputs'>
         <input
-          {...register('password', { required: true, type: 'password' })}
+          {...register('password', { required: true })}
           placeholder='Password'
+          type='password'
         />
         {/* errors will return when field validation fails  */}
         {errors.password && <span>This field is required</span>}
@@ -85,12 +94,12 @@ const LoginComponent = ({ callback }) => {
 
       <input type='submit' value='Login' />
 
-      {/*Pass reset workflow link via callback function to parent */}
+      {/*Pass reset workflow link via workflow function to parent */}
       <div>
         <span
           className='login_trouble'
           onClick={() => {
-            callback('login', 'reset');
+            workflow('login', 'reset');
           }}
           id='reset'>
           Trouble logging in?

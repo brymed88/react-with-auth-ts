@@ -8,8 +8,12 @@ import './SpinnerComponent.min.css';
  *
  * Ex. <SpinnerComponent type='full' size='100px' />
  */
+type Props = {
+  type: string;
+  size: string;
+};
 
-const SpinnerComponent = ({ type, size }) => {
+const SpinnerComponent: React.FC<Props> = ({ type, size }) => {
   return (
     <section className={type === 'full' ? 'spinner-full' : 'spinner-part'}>
       <div style={{ height: `${size}`, width: `${size}` }}></div>

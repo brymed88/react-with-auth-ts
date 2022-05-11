@@ -1,7 +1,12 @@
-const SuccessComponent = ({ callback, origin }) => {
+interface Props {
+  workflow: (prev: string, target: string) => void;
+  prevPage: string;
+}
+
+const SuccessComponent: React.FC<Props> = ({ workflow, prevPage }) => {
   let message;
 
-  switch (origin) {
+  switch (prevPage) {
     case 'verify':
       message = 'Verification successful!';
       break;
@@ -17,7 +22,7 @@ const SuccessComponent = ({ callback, origin }) => {
       <input
         type='submit'
         onClick={() => {
-          callback('success', 'login');
+          workflow('success', 'login');
         }}
         value='Please Login'
       />

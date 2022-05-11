@@ -4,8 +4,9 @@ import { Outlet } from 'react-router-dom';
 
 import '../../normalize.min.css';
 import './index.min.css';
+import React, { ReactElement, ReactNode } from 'react';
 
-const FrontLayout = ({ children }) => {
+const FrontLayout = ({ children }: { children?: ReactNode }): ReactElement => {
   return (
     <section>
       <Head />

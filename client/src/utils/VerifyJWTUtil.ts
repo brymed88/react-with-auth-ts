@@ -6,11 +6,7 @@ const serverURL = process.env.REACT_APP_SERVER_URL;
 
 /*Calls api route and verifies token is valid. If valid, returns success */
 const VerifyJWTUtil = async () => {
-  //Grab token from local storage
-  const token = {
-    token: JSON.parse(localStorage.token),
-  };
-
+  const token = { token: JSON.parse(localStorage.token) };
   const response = await ApiCall(
     token,
     `${serverURL}/api/account/verify`,

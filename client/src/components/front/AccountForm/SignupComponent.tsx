@@ -1,27 +1,35 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import { Signup } from '../../../utils/AuthUtil';
 import SpinnerComponent from '../../common/spinner/SpinnerComponent';
-import FormContext from './FormContext';
 
-const SignupComponent = ({ callback }) => {
+interface Props {
+  workflow: (prev: string, target: string) => void;
+  updateEmail: (email: string) => void;
+}
+
+const SignupComponent: React.FC<Props> = ({ workflow, updateEmail }) => {
+  // This type will be used later in the form.
+  type FormData = {
+    email: string;
+    password: string;
+    vpassword: string;
+  };
+
   //De-structure useForm import variables
   const {
     register,
     handleSubmit,
     setError,
     formState: { errors },
-  } = useForm();
-
-  //Get Form Context
-  const [context, setContext] = useContext(FormContext);
+  } = useForm<FormData>();
 
   //Setup state variables for form functionality
   const [loading, setLoading] = useState(false);
   const [submitError, setSubmitError] = useState(false);
 
-  const FormSubmit = async (data) => {
+  const FormSubmit = async (data: FormData) => {
     //Reset submit status in case of past failure
     setSubmitError(false);
 
@@ -35,13 +43,13 @@ const SignupComponent = ({ callback }) => {
       //Successful login, redirect user to dashboard
       if (response.status === 'success') {
         //Add user email to context
-        setContext(data.email);
+        updateEmail(data.email);
 
         //Disable loading spinner as action is now complete
         setLoading(false);
 
         //Call back for parent function to proceed to email code verification
-        callback('signup', 'verify');
+        workflow('signup', 'verify');
       } else {
         //Set form error for unsuccessful login
         setSubmitError(true);
@@ -76,9 +84,7 @@ const SignupComponent = ({ callback }) => {
         <input
           {...register('email', {
             required: true,
-            pattern: {
-              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-            },
+            pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
           })}
           placeholder='Email'
         />

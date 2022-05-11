@@ -1,29 +1,36 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, ReactElement, ReactNode } from 'react';
 import { Navigate } from 'react-router-dom';
 import { VerifyJWTUtil } from '../../../utils/VerifyJWTUtil';
 import { VerifyLocalAuth } from '../../../utils/LocalAuthUtil';
 
 import SpinnerComponent from '../spinner/SpinnerComponent';
 
-const PrivateRouteComponent = ({ children }) => {
-  const [isAuth, setIsAuth] = useState();
+const PrivateRouteComponent = ({
+  children,
+}: {
+  children: ReactNode;
+}): ReactElement => {
+  const [isAuth, setIsAuth] = useState(Boolean);
 
   //Verify JWT token on page load and set useState based on response
-  useEffect(async () => {
+  useEffect(() => {
     const localAuth = VerifyLocalAuth();
 
-    //Check for local token first before api call
-    if (localAuth.status === 'valid') {
-      const serverAuth = await VerifyJWTUtil();
+    const isSessionValid = async () => {
+      //Check for local token first before api call
+      if (localAuth.status === 'valid') {
+        const serverAuth = await VerifyJWTUtil();
 
-      if (serverAuth.status === 'success') {
-        setIsAuth(true);
+        if (serverAuth.status === 'success') {
+          setIsAuth(true);
+        } else {
+          setIsAuth(false);
+        }
       } else {
         setIsAuth(false);
       }
-    } else {
-      setIsAuth(false);
-    }
+    };
+    isSessionValid();
   }, []);
 
   if (isAuth === true) {

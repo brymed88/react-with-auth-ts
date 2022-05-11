@@ -1,25 +1,32 @@
-import React, { useState, useContext } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import SpinnerComponent from '../../common/spinner/SpinnerComponent';
 import { VerifyCode } from '../../../utils/AuthUtil';
-import FormContext from './FormContext';
+import SpinnerComponent from '../../common/spinner/SpinnerComponent';
 
-const VerifyComponent = ({ callback, origin }) => {
+interface Props {
+  workflow: (prev: string, target: string) => void;
+  email: string;
+  prevPage: string;
+}
+
+const VerifyComponent: React.FC<Props> = ({ workflow, email, prevPage }) => {
+  // This type will be used later in the form.
+  type FormData = {
+    code: number;
+    email: string;
+  };
   //De-structure useForm import variables
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
-
-  //Get Form Context
-  const [context, setContext] = useContext(FormContext);
+  } = useForm<FormData>();
 
   //Setup state variables for form functionality
   const [loading, setLoading] = useState(false);
   const [submitError, setSubmitError] = useState(false);
 
-  const FormSubmit = async (data) => {
+  const FormSubmit = (data: FormData) => {
     //Reset submit status in case of past failure
     setSubmitError(false);
 
@@ -28,34 +35,37 @@ const VerifyComponent = ({ callback, origin }) => {
 
     if (data) {
       //Add user email from context to data object before validation
-      data.email = `${context}`;
+      data.email = `${email}`;
 
-      //Call util function for api call to process code verification
-      const response = await VerifyCode(data);
+      const ProcessForm = async () => {
+        //Call util function for api call to process code verification
+        const response = await VerifyCode(data);
 
-      //Successful login, redirect user to dashboard
-      if (response.status === 'success') {
-        //Disable loading spinner as action is now complete
-        setLoading(false);
+        //Successful login, redirect user to dashboard
+        if (response.status === 'success') {
+          //Disable loading spinner as action is now complete
+          setLoading(false);
 
-        switch (origin) {
-          //if signup workflow
-          case 'signup':
-            callback('verify', 'success');
-            break;
-          //if pass reset workflow
-          case 'reset':
-            callback('verify', 'passreset');
-            break;
-          default:
+          switch (prevPage) {
+            //if signup workflow
+            case 'signup':
+              workflow('verify', 'success');
+              break;
+            //if pass reset workflow
+            case 'reset':
+              workflow('verify', 'success');
+              break;
+            default:
+          }
+        } else {
+          //Set form error for unsuccessful login
+          setSubmitError(true);
+
+          //Disable loading spinner as action is now complete
+          setLoading(false);
         }
-      } else {
-        //Set form error for unsuccessful login
-        setSubmitError(true);
-
-        //Disable loading spinner as action is now complete
-        setLoading(false);
-      }
+      };
+      ProcessForm();
     }
   };
 
@@ -76,9 +86,7 @@ const VerifyComponent = ({ callback, origin }) => {
           <input
             {...register('code', {
               required: true,
-              pattern: {
-                value: /^[0-9]{6}$/,
-              },
+              pattern: /^[0-9]{6}$/,
             })}
             placeholder='Authorization Code'
           />

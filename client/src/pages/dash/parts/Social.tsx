@@ -8,7 +8,7 @@ import github from '../../../assets/dash/github.svg';
 const Social = () => {
   return (
     <section className='social'>
-      <a href='https://treantlabs.com' target='_blank' rel='norefferer'>
+      <a href='https://treantlabs.com' target='_blank' rel='noreferrer'>
         Treantlabs.com
       </a>
       <div>
@@ -17,7 +17,7 @@ const Social = () => {
             <a
               href='https://facebook.com/treantlabs'
               target='_blank'
-              rel='norefferer'>
+              rel='noreferrer'>
               <img src={facebook} alt='Treantlabs - facebook' />
             </a>
           </li>
@@ -25,7 +25,7 @@ const Social = () => {
             <a
               href='https://twitter.com/treantlabs'
               target='_blank'
-              rel='norefferer'>
+              rel='noreferrer'>
               <img src={twitter} alt='Treantlabs - Twitter' />
             </a>
           </li>
@@ -33,7 +33,7 @@ const Social = () => {
             <a
               href='https://github.com/brymed88'
               target='_blank'
-              rel='norefferer'>
+              rel='noreferrer'>
               <img src={github} alt='Treantlabs - Github' />
             </a>
           </li>

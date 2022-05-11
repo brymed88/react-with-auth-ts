@@ -24,6 +24,7 @@ yarn-error.log*
 
 #User Ignore
 package-lock.json
+yarn.lock
 .vscode
 *.css
 *.min.css

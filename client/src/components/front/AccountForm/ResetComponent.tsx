@@ -1,25 +1,31 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { GenerateCode } from '../../../utils/AuthUtil';
 import SpinnerComponent from '../../common/spinner/SpinnerComponent';
 
-import FormContext from './FormContext';
-const ResetComponent = ({ callback }) => {
+interface Props {
+  workflow: (prev: string, target: string) => void;
+  updateEmail: (email: string) => void;
+}
+
+const ResetComponent: React.FC<Props> = ({ workflow, updateEmail }) => {
+  // This type will be used later in the form.
+  type User = {
+    email: string;
+  };
+
   //De-structure useForm import variables
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
-
-  //Get Form Context
-  const [context, setContext] = useContext(FormContext);
+  } = useForm<User>();
 
   //Setup state variables for form functionality
   const [loading, setLoading] = useState(false);
   const [submitError, setSubmitError] = useState(false);
 
-  const FormSubmit = async (data) => {
+  const FormSubmit = (data: User) => {
     //Reset submit status in case of past failure
     setSubmitError(false);
 
@@ -27,26 +33,28 @@ const ResetComponent = ({ callback }) => {
     setLoading(true);
 
     if (data) {
-      //Call util function to process api call and generate one-time code
-      const response = await GenerateCode(data);
+      const ProcessForm = async () => {
+        //Call util function to process api call and generate one-time code
+        const response = await GenerateCode(data);
 
-      //Successful login, redirect user to dashboard
-      if (response.status === 'success') {
-        //Add user email to context
-        setContext(data.email);
+        //Successful login, redirect user to dashboard
+        if (response.status === 'success') {
+          //Add user email to context
+          updateEmail(data.email);
+          //Disable loading spinner as action is now complete
+          setLoading(false);
 
-        //Disable loading spinner as action is now complete
-        setLoading(false);
+          //If the pass reset code has been sent to user and api returns successfull. Navigate to verify page.
+          workflow('reset', 'verify');
+        } else {
+          //Set form error for unsuccessful login
+          setSubmitError(true);
 
-        //If the pass reset code has been sent to user and api returns successfull. Navigate to verify page.
-        callback('reset', 'verify');
-      } else {
-        //Set form error for unsuccessful login
-        setSubmitError(true);
-
-        //Disable loading spinner as action is now complete
-        setLoading(false);
-      }
+          //Disable loading spinner as action is now complete
+          setLoading(false);
+        }
+      };
+      ProcessForm();
     }
   };
 
@@ -67,9 +75,7 @@ const ResetComponent = ({ callback }) => {
         <input
           {...register('email', {
             required: true,
-            pattern: {
-              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-            },
+            pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
           })}
           placeholder='Email'
         />

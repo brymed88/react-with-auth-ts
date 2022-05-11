@@ -28,7 +28,7 @@ function App() {
       <Routes>
         {/* Routes will use FrontLayout which will be different than the user dashboard */}
         <Route element={<FrontLayout />}>
-          <Route path='/' element={<Home />} exact />
+          <Route path='/' element={<Home />} />
           <Route
             path='*'
             element={
