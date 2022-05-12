@@ -53,7 +53,7 @@ const VerifyComponent: React.FC<Props> = ({ workflow, email, prevPage }) => {
               break;
             //if pass reset workflow
             case 'reset':
-              workflow('verify', 'success');
+              workflow('verify', 'passreset');
               break;
             default:
           }
