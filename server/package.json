@@ -5,21 +5,25 @@
   "type": "module",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.1",
-    "@testing-library/react": "^12.1.2",
-    "@testing-library/user-event": "^13.5.0",
+    "@types/bcryptjs": "^2.4.2",
+    "@types/express": "^4.17.13",
+    "@types/jsonwebtoken": "^8.5.8",
+    "@types/node": "^17.0.32",
+    "@types/nodemailer": "^6.4.4",
     "bcryptjs": "^2.4.3",
+    "dotenv": "^16.0.1",
     "express": "^4.17.3",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.2.4",
     "nodemailer": "^6.7.3",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-scripts": "5.0.0",
+    "ts-node": "^10.7.0",
+    "tsc": "^2.0.4",
+    "typescript": "^4.6.4",
     "winston": "^3.6.0",
     "winston-daily-rotate-file": "^4.6.1"
   },
   "scripts": {
-    "start": "node server.js",
+    "start": "node --loader ts-node/esm ./server.ts",
     "test": "jest"
   }
 }

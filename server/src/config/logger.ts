@@ -1,6 +1,5 @@
 import * as winston from 'winston';
 import 'winston-daily-rotate-file';
-import {} from 'dotenv/config';
 
 const config = process.env;
 
@@ -9,9 +8,9 @@ const logger = winston.createLogger({
     winston.format.timestamp({
       format: 'YYYY-MM-DD HH:mm:ss',
     }),
+    winston.format.timestamp(),
     winston.format.json()
   ),
-  timestamp: true,
   transports: [
     new winston.transports.Console(),
     new winston.transports.DailyRotateFile({
@@ -28,9 +27,9 @@ const userLogger = winston.createLogger({
     winston.format.timestamp({
       format: 'YYYY-MM-DD HH:mm:ss',
     }),
+    winston.format.timestamp(),
     winston.format.json()
   ),
-  timestamp: true,
   transports: [
     new winston.transports.Console(),
     new winston.transports.DailyRotateFile({

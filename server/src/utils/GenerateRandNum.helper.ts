@@ -1,4 +1,4 @@
-const GenerateRandNum = (length) => {
+const GenerateRandNum = (length: number) => {
   if (length) {
     let numLength = '1';
 

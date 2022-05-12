@@ -1,7 +1,7 @@
 import express from 'express';
 import { contactRoute } from './src/routes/contact.route.js';
 import { accountRoute } from './src/routes/account.route.js';
-import {} from 'dotenv/config';
+import 'dotenv/config';
 
 const config = process.env;
 
@@ -28,7 +28,7 @@ app.use(function (req, res, next) {
     'Access-Control-Allow-Headers',
     'Origin, X-Requested-With, Content-Type, Accept'
   );
-  res.header('Access-Control-Allow-Credentials', true);
+  res.header('Access-Control-Allow-Credentials', 'true');
   next();
 });
 

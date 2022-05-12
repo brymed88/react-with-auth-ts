@@ -4,9 +4,15 @@ import bcrypt from 'bcryptjs';
 import contactService from './contact.service.js';
 import GenerateRandNum from '../utils/GenerateRandNum.helper.js';
 
-const accountService = {};
+const accountService: any = {};
 
-accountService.login = async ({ email, password }) => {
+interface VariableTypes {
+  email: string;
+  password: string;
+  code: number;
+}
+
+accountService.login = async ({ email, password }: VariableTypes) => {
   // Validate user input
   if (!(email && password)) {
     return { status: 'null' };
@@ -23,9 +29,10 @@ accountService.login = async ({ email, password }) => {
     //Create signed jwt token
     const token = jwt.sign(
       { user_id: user._id, email },
-      process.env.TOKEN_KEY,
+      process.env.TOKEN_KEY as string,
       {
         expiresIn: '12h',
+        algorithm: 'HS256',
       }
     );
 
@@ -41,7 +48,7 @@ accountService.login = async ({ email, password }) => {
   return { status: 'Invalid Credentials' };
 };
 
-accountService.create = async ({ email, password }) => {
+accountService.create = async ({ email, password }: VariableTypes) => {
   if (!(email && password)) {
     return { status: 'Invalid input' };
   }
@@ -78,7 +85,7 @@ accountService.create = async ({ email, password }) => {
   return { status: 'failed' };
 };
 
-accountService.passReset = async ({ email, password }) => {
+accountService.passReset = async ({ email, password }: VariableTypes) => {
   //If email input does not exist return invalid
   if (!email) {
     return { status: 'invalid user' };
@@ -105,7 +112,7 @@ accountService.passReset = async ({ email, password }) => {
   return { status: 'invalid user' };
 };
 
-accountService.generateCode = async ({ email }) => {
+accountService.generateCode = async ({ email }: VariableTypes) => {
   //If email input does not exist return invalid
   if (!email) {
     return { status: 'invalid user' };
@@ -132,7 +139,7 @@ accountService.generateCode = async ({ email }) => {
   return { status: 'invalid user' };
 };
 
-accountService.verifyCode = async ({ email, code }) => {
+accountService.verifyCode = async ({ email, code }: VariableTypes) => {
   code.toString();
 
   // Validate user input

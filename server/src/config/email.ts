@@ -1,6 +1,6 @@
 import nodemailer from 'nodemailer';
 
-export async function sendMail(options) {
+export async function sendMail(options: any) {
   /*
    Note: The below function transporter section will change depending on your email host. See documentation
    at https://nodemailer.com/about/. The below example is currently using FastMail.
@@ -16,7 +16,7 @@ export async function sendMail(options) {
 
   const mail = await transporter.sendMail(options);
 
-  if (mail.accepted !== '') {
+  if (mail.accepted !== []) {
     console.log(`Authorization code sent to ${options.to}`);
     return { status: 'sent' };
   } else {

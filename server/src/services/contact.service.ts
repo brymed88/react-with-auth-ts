@@ -1,8 +1,15 @@
 import { sendMail } from '../config/email.js';
 
-const contactService = {};
+const contactService: any = {};
 
-contactService.sendcode = ({ email, code }) => {
+interface VariableTypes {
+  name: string;
+  email: string;
+  code: number;
+  topic: string;
+}
+
+contactService.sendcode = ({ email, code }: VariableTypes) => {
   let mailOptions = {
     from: process.env.SUPPORT_ADDRESS, //support address from env file
     to: email,
@@ -24,7 +31,7 @@ contactService.sendcode = ({ email, code }) => {
   sendMail(mailOptions);
 };
 
-contactService.resetPassword = ({ email }) => {
+contactService.resetPassword = ({ email }: VariableTypes) => {
   let mailOptions = {
     from: process.env.SUPPORT_ADDRESS, //support address from env file
     to: email,
@@ -46,7 +53,7 @@ contactService.resetPassword = ({ email }) => {
   sendMail(mailOptions);
 };
 
-contactService.resetCode = ({ email, code }) => {
+contactService.resetCode = ({ email, code }: VariableTypes) => {
   let mailOptions = {
     from: process.env.SUPPORT_ADDRESS, //support address from env file
     to: email,
@@ -68,7 +75,7 @@ contactService.resetCode = ({ email, code }) => {
   sendMail(mailOptions);
 };
 
-contactService.contactForm = async ({ email, name, topic }) => {
+contactService.contactForm = async ({ email, name, topic }: VariableTypes) => {
   let mailOptions = {
     from: email, //support address from env file
     to: process.env.SUPPORT_ADDRESS,
