@@ -62,26 +62,26 @@ See installation instructions from [MongoDB.com](https://www.mongodb.com/docs/ma
 On linux/Mac cd into your desired directory and run...
 
 ```
-git clone https://github.com/brymed88/react-with-auth
+git clone https://github.com/brymed88/react-with-auth-ts
 ```
 
 Traverse into the project folder and install dependencies for the client and server code.
 
 ```
-cd ./react-with-auth/client
+cd ./react-with-auth-ts/client
 npm install
 
-cd ./react-with-auth/server
+cd ./react-with-auth-ts/server
 npm install
 ```
 
 Then start the client and server side environements
 
 ```
-cd ./react-with-auth/client
+cd ./react-with-auth-ts/client
 npm start
 
-cd ./react-with-auth/server
+cd ./react-with-auth-ts/server
 npm start
 ```
 
